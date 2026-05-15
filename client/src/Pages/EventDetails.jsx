@@ -108,7 +108,7 @@ const EventDetails = () => {
               </button>
             </>
           )}
-          {role === "vendor" && (
+          {role === "vendor" && eventData.status === "Upcoming" && (
             <button
               id="bookNow"
               className={`book-now-btn ${eventData.bookedbooths >= eventData.boothslots ? '!bg-gray-400 !cursor-not-allowed !border-[#fefefe] hover:!text-[#fefefe]' : ''}`}
@@ -227,7 +227,7 @@ const EventDetails = () => {
               <div className="event-description">
                 <p className="text-justify whitespace-pre-wrap">{eventData.eventdetails}</p>
                 <br />
-                <table className="payment-info-section">
+                <table className="my-border-table">
                   <tbody>
                     <tr className="border-b border-gray-500">
                       <td className="p-3 border-r border-gray-350"><strong>Booth Fee:</strong></td>

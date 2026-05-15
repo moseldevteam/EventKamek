@@ -401,13 +401,13 @@ const sendEventUpdateEmailToVendor = async (
   console.log('[Manual Trigger] Running status updater');
   const result = await pool.query(`SELECT * FROM events`);
   for (let event of result.rows) {
-    const today = new Date();
-    const start = new Date(event.eventstartdate);
-    const end = new Date(event.eventenddate);
+    const todayStr = new Date().toISOString().split('T')[0];
+    const startStr = event.eventstartdate.slice(0, 10);
+    const endStr = event.eventenddate.slice(0, 10);
 
     let newStatus = '';
-    if (today < start) newStatus = 'Upcoming';
-    else if (today >= start && today <= end) newStatus = 'Ongoing';
+    if (todayStr < startStr) newStatus = 'Upcoming';
+    else if (todayStr >= startStr && todayStr <= endStr) newStatus = 'Ongoing';
     else newStatus = 'Past';
 
     if (event.status !== newStatus) {
@@ -519,13 +519,13 @@ app.get('/api/events', async (req, res) => {
     res.json(result.rows);
 
     for (let event of result.rows) {
-      const today = new Date();
-      const start = new Date(event.eventstartdate);
-      const end = new Date(event.eventenddate);
+      const todayStr = new Date().toISOString().split('T')[0];
+      const startStr = event.eventstartdate.slice(0, 10);
+      const endStr = event.eventenddate.slice(0, 10);
 
       let newStatus = '';
-      if (today < start) newStatus = 'Upcoming';
-      else if (today >= start && today <= end) newStatus = 'Ongoing';
+      if (todayStr < startStr) newStatus = 'Upcoming';
+      else if (todayStr >= startStr && todayStr <= endStr) newStatus = 'Ongoing';
       else newStatus = 'Past';
 
       if (event.status !== newStatus) {
@@ -651,6 +651,9 @@ app.post('/api/bookings', async (req, res) => {
     client.release();
   }
 });
+
+// image default //
+
 
 // ========== CREATE EVENT ==========
 
@@ -1162,13 +1165,13 @@ app.get('/api/eventsbooth', async (req, res) => {
     res.json(result.rows);
 
     for (let event of result.rows) {
-      const today = new Date();
-      const start = new Date(event.eventstartdate);
-      const end = new Date(event.eventenddate);
+      const todayStr = new Date().toISOString().split('T')[0];
+      const startStr = event.eventstartdate.slice(0, 10);
+      const endStr = event.eventenddate.slice(0, 10);
 
       let newStatus = '';
-      if (today < start) newStatus = 'Upcoming';
-      else if (today >= start && today <= end) newStatus = 'Ongoing';
+      if (todayStr < startStr) newStatus = 'Upcoming';
+      else if (todayStr >= startStr && todayStr <= endStr) newStatus = 'Ongoing';
       else newStatus = 'Past';
 
       if (event.status !== newStatus) {
@@ -1274,13 +1277,13 @@ app.get('/api/eventbooths/:eventId', async (req, res) => {
     });
 
     for (let event of eventResult.rows) {
-      const today = new Date();
-      const start = new Date(event.eventstartdate);
-      const end = new Date(event.eventenddate);
+      const todayStr = new Date().toISOString().split('T')[0];
+      const startStr = event.eventstartdate.slice(0, 10);
+      const endStr = event.eventenddate.slice(0, 10);
 
       let newStatus = '';
-      if (today < start) newStatus = 'Upcoming';
-      else if (today >= start && today <= end) newStatus = 'Ongoing';
+      if (todayStr < startStr) newStatus = 'Upcoming';
+      else if (todayStr >= startStr && todayStr <= endStr) newStatus = 'Ongoing';
       else newStatus = 'Past';
 
       if (event.status !== newStatus) {

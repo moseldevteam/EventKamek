@@ -16,7 +16,6 @@ const FilterEventsSection = ({ view, role, events, onFilter }) => {
 
   useEffect(() => {
     let filtered = [...events];
-    const now = new Date();
 
     const { searchTerm, status, startDate, endDate, sortBy, myOnly } = appliedFilters;
 
@@ -32,13 +31,14 @@ const FilterEventsSection = ({ view, role, events, onFilter }) => {
     );
   }
 
-    // Status filter
+    // Status filter — compare as date strings to avoid UTC-midnight timezone issues
+    const todayStr = new Date().toISOString().split('T')[0];
     filtered = filtered.filter(event => {
-      const start = new Date(event.eventstartdate);
-      const end = new Date(event.eventenddate);
-      const isUpcoming = start > now;
-      const isOngoing = start <= now && end >= now;
-      const isPast = end < now;
+      const startStr = event.eventstartdate?.slice(0, 10);
+      const endStr = event.eventenddate?.slice(0, 10);
+      const isUpcoming = startStr > todayStr;
+      const isOngoing = startStr <= todayStr && endStr >= todayStr;
+      const isPast = endStr < todayStr;
       return (
         (status.upcoming && isUpcoming) ||
         (status.ongoing && isOngoing) ||
@@ -46,7 +46,7 @@ const FilterEventsSection = ({ view, role, events, onFilter }) => {
       );
     });
 
-    // Date range filter — compare as YYYY-MM-DD strings to avoid timezone shifts
+    // Date range filter. use eventstartdate for start bound so ongoing events aren't excluded
     if (startDate) {
       filtered = filtered.filter(e => e.eventstartdate?.slice(0, 10) >= startDate);
     }
